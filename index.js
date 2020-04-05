@@ -1,8 +1,10 @@
 require('tls').DEFAULT_MIN_VERSION = 'TLSv1'
+const soap = require('soap');
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const url = 'https://passport.psu.ac.th/authentication/authentication.asmx?wsdl';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,6 +29,25 @@ let data_fishs = [
         'fish_detail': 'ลาน้ำหมึก เป็นปลาน้ำจืดชนิดหนึ่ง มีชื่อวิทยาศาสตร์ว่า Opsarius pulchellus อยู่ในวงศ์ปลาตะเพียน รูปร่างคล้ายปลาน้ำหมึกโคราช ซึ่งเป็นปลาในสกุลเดียวกัน ต่างกันที่น้ำหมึกมีลำตัวที่ป้อมสั้นกว่า ปลายปากป้าน มีสีสันที่สดใสกว่าและลายขีดข้างลำตัวใหญ่และชัดเจนกว่า เกล็ดมีขนาดใหญ่กว่า ครีบหลังมีแต้มสีแดงเห็นชัดเจน'
     },
 ]
+
+app.post('/login', (req, res) => {
+    console.log(req.body);
+    soap.createClient(url, (err, client) => {
+        if (err) console.error(err);
+        else {
+            let user = {}
+            user.username = req.body.username
+            user.password = req.body.password
+            client.GetStudentDetails(user, function (err, response) {
+                if (err) console.error(err);
+                else {
+                    console.log(response);
+                    res.send(response);
+                }
+            });
+        }
+    });
+})
 
 app.get("/datafish", (req, res) => {
     res.json(data_fishs)
