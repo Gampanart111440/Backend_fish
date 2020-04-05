@@ -68,6 +68,7 @@ app.post('/fish', (req, res) => {
     data_fish.common_name = req.body.common_name
     data_fish.scientific_name = req.body.scientific_name
     data_fish.image = req.body.image
+    data_fish.fish_detail = req.body.fish_detail
     data_fishs.unshift(data_fish)
     res.json({ message: "Successfully" })
 })
@@ -80,6 +81,7 @@ app.put('/update/:id_fish', (req, res) => {
     data_fishs[idx].common_name = req.body.common_name
     data_fishs[idx].scientific_name = req.body.scientific_name
     data_fishs[idx].image = req.body.image
+    data_fishs[idx].fish_detail = req.body.fish_detail
     res.json({ message: 'Data fish updated! id: ' + req.params.id_fish });
 })
 
